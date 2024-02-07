@@ -14,26 +14,17 @@ def champions_league_scraper(temporada):
         #parseamos el contenido de la pagina
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        #Encontar la tabla de resultados
-        tabla = soup.find('table', {'class': 'js-event-list-tournament-page'})
+        #Encontar la tabla de resultados (inspeccionar pero ahora pruebo)
+        tabla = soup.find('div', {'class': 'sc-jlZhew kgghii'})
 
         #lista para almacenar datos
         partidos = []
 
         #iteramos sobre las filas de la tabla
-        for fila in tabla.find_all('tr'):
-            #iteramos sobre las columnas de la fila
-            cols = fila.find_all('td')
+        for fila in tabla.find_all('div', {'class': 'sc-fqkvVR byYarT'}):
+            #extraer los datos
+            local_team= fila.find('div', {'class': 'sc-fqkvVR byYarT'}).text.strip()
 
-            #verificar si la fila tiene datos
-            if len(cols) > 0:
-                #obtener datos de la fila
-                fecha = cols[0].text.strip()
-                local = cols[1].text.strip()
-                visitante = cols[3].text.strip()
-                resultado = cols[2].text.strip()
-                #agregar datos a la lista
-                partidos.append([fecha, local, resultado, visitante])
 
         #guardar datos en un archivo csv
         nombre_csv = 'champions_league_' + temporada + '.csv'
