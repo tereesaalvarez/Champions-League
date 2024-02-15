@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Lee el archivo CSV
-df = pd.read_csv('datos/champions_2016_2022.csv', delimiter=';', encoding='latin1')
+df = pd.read_csv('datos/champions_2016_2022.csv')
 
 # Divide la columna SEASON en dos partes usando el guion y toma el primer elemento como el año de inicio de la temporada
 df['SEASON'] = df['SEASON'].str.split('-').str[0]
