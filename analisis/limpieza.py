@@ -11,7 +11,7 @@ import pandas as pd
 # guardar dataframes limpios en nuevos archivos csv
 #df_2016_2022_bien.to_csv('datos/champions_2016_2022.csv', index=False, sep=',', encoding='utf-8-sig')
 #df_2022_2023_bien.to_csv('datos/champions_2022_2023.csv', index=False, sep=',', encoding='utf-8-sig')
-
+'''
 df = pd.read_csv('datos_limpios/champions_2022_2023.csv')
 
 #Diccionario de cambio de nombres para que coincidan con los otros csv
@@ -39,4 +39,9 @@ df['HOME_TEAM'].replace(cambios_nombre, inplace=True)
 df['AWAY_TEAM'].replace(cambios_nombre, inplace=True)
 
 # guardar el dataframe modificado en la carpeta datos_limpios
+#df.to_csv('datos_limpios/champions_2022_2023.csv', index=False, sep=',', encoding='utf-8-sig')
+'''
+
+df = pd.read_csv('datos_limpios/champions_2022_2023.csv')
+df['SEASON']= '2022'
 df.to_csv('datos_limpios/champions_2022_2023.csv', index=False, sep=',', encoding='utf-8-sig')
