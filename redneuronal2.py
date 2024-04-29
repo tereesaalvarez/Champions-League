@@ -15,9 +15,13 @@ def load_and_prepare_data(filepath):
     data = pd.get_dummies(data)
     X = data.drop('Porcentaje Victoria', axis=1)
     y = data['Porcentaje Victoria']
+    return X, y, data.columns.drop('Porcentaje Victoria')
+
+# Normalización de los datos
+def normalize_data(X):
     scaler = StandardScaler()
-    X = scaler.fit_transform(X)
-    return X, y
+    X_scaled = scaler.fit_transform(X)
+    return X_scaled, scaler
 
 # Construcción del modelo de red neuronal
 def build_neural_network(input_dim):
@@ -54,20 +58,24 @@ def plot_training_history(history):
     plt.legend()
     plt.show()
 
-# Determinar y mostrar el ganador
-def predict_winner(model, X, team_names):
+# Predicción de los porcentajes de victoria y determinación del ganador
+def predict_and_display_results(model, X, team_names, scaler):
     predictions = model.predict(X)
-    winner_index = np.argmax(predictions)
-    print(f"The predicted winner is: {team_names[winner_index]} with a predicted victory percentage of {predictions[winner_index][0]:.2f}%")
+    rescaled_predictions = scaler.inverse_transform(predictions)  # Reescalado a la escala original
+    for team, prediction in zip(team_names, rescaled_predictions):
+        print(f"{team}: Predicted Victory Percentage: {prediction[0]:.2f}%")
+    winner_index = np.argmax(rescaled_predictions)
+    print(f"The predicted winner is: {team_names[winner_index]} with a predicted victory percentage of {rescaled_predictions[winner_index][0]:.2f}%")
 
 if __name__ == "__main__":
     filepath = 'datos_semis/combined_data.csv'
     team_names = ['Bayern München', 'Real Madrid', 'Paris Saint-Germain', 'Borussia Dortmund']
-    X, y = load_and_prepare_data(filepath)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X, y, feature_names = load_and_prepare_data(filepath)
+    X_scaled, scaler = normalize_data(X)
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
     model = build_neural_network(X_train.shape[1])
     model, history = train_model(model, X_train, y_train)
     evaluate_model(model, X_test, y_test)
     plot_training_history(history)
-    predict_winner(model, X, team_names)
+    predict_and_display_results(model, X_scaled, team_names, scaler)
