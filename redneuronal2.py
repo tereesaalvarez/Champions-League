@@ -14,14 +14,12 @@ def load_and_prepare_data(filepath):
     data = pd.read_csv(filepath)
     data = pd.get_dummies(data)
     X = data.drop('Porcentaje Victoria', axis=1)
-    y = data['Porcentaje Victoria']
-    return X, y, data.columns.drop('Porcentaje Victoria')
-
-# Normalización de los datos
-def normalize_data(X):
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    return X_scaled, scaler
+    y = data['Porcentaje Victoria'].values.reshape(-1, 1)  # Reshape para scaler
+    X_scaler = StandardScaler()
+    y_scaler = StandardScaler()
+    X_scaled = X_scaler.fit_transform(X)
+    y_scaled = y_scaler.fit_transform(y)
+    return X_scaled, y_scaled, X_scaler, y_scaler, data.columns.drop('Porcentaje Victoria')
 
 # Construcción del modelo de red neuronal
 def build_neural_network(input_dim):
@@ -59,9 +57,9 @@ def plot_training_history(history):
     plt.show()
 
 # Predicción de los porcentajes de victoria y determinación del ganador
-def predict_and_display_results(model, X, team_names, scaler):
+def predict_and_display_results(model, X, team_names, y_scaler):
     predictions = model.predict(X)
-    rescaled_predictions = scaler.inverse_transform(predictions)  # Reescalado a la escala original
+    rescaled_predictions = y_scaler.inverse_transform(predictions)  # Correctly rescaled
     for team, prediction in zip(team_names, rescaled_predictions):
         print(f"{team}: Predicted Victory Percentage: {prediction[0]:.2f}%")
     winner_index = np.argmax(rescaled_predictions)
@@ -70,12 +68,11 @@ def predict_and_display_results(model, X, team_names, scaler):
 if __name__ == "__main__":
     filepath = 'datos_semis/combined_data.csv'
     team_names = ['Bayern München', 'Real Madrid', 'Paris Saint-Germain', 'Borussia Dortmund']
-    X, y, feature_names = load_and_prepare_data(filepath)
-    X_scaled, scaler = normalize_data(X)
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+    X, y, X_scaler, y_scaler, feature_names = load_and_prepare_data(filepath)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     model = build_neural_network(X_train.shape[1])
     model, history = train_model(model, X_train, y_train)
     evaluate_model(model, X_test, y_test)
     plot_training_history(history)
-    predict_and_display_results(model, X_scaled, team_names, scaler)
+    predict_and_display_results(model, X, team_names, y_scaler)
