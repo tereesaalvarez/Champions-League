@@ -9,6 +9,10 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 
+
+# Este es el correcto
+
+
 # Carga y preparación de datos
 def load_and_prepare_data(filepath):
     data = pd.read_csv(filepath)
@@ -42,7 +46,7 @@ def train_model(model, X_train, y_train, epochs=100, batch_size=32):
 
 # Evaluación del modelo
 def evaluate_model(model, X_test, y_test):
-    model.load_weights('best_model.keras')
+    #model.load_weights('best_model.keras')
     loss, mae = model.evaluate(X_test, y_test, verbose=0)
     print(f"Test Loss: {loss}, Test MAE: {mae}")
 

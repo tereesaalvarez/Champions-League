@@ -6,7 +6,9 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
-# Carga y preparación de datos
+
+# Este no es el correcto. El correcto es redneuronal2.py
+
 def load_and_prepare_data(filepath):
     data = pd.read_csv(filepath)
     data = pd.get_dummies(data)
