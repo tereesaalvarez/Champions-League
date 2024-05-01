@@ -1,4 +1,8 @@
 # chatbot.py
+import os
+#Resolver conflicto de la bibilioteca transformers con OpenMP
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 from transformers import RagTokenizer, RagTokenForGeneration, RagRetriever
 
 def setup_rag_model():
@@ -15,7 +19,7 @@ def get_response(question, tokenizer, model):
 
 def test_chatbot():
     tokenizer, model = setup_rag_model()
-    question = "¿Quién ganó la Copa del Mundo 2018?"
+    question = "¿Quién ganó la Copa del Mundo 2010?"
     response = get_response(question, tokenizer, model)
     print("Pregunta:", question)
     print("Respuesta del chatbot:", response)
