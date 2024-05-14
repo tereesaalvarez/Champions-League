@@ -23,6 +23,7 @@ def main():
     elif choice == '3':
         X, y = load_ad(filepath)
         model, X_test, y_test = train_decision_tree(X, y)
+
         mse, predictions = eval_ad(model, X_test, y_test)
         print(f"Model Mean Squared Error: {mse}")
         display_ad(predictions)
