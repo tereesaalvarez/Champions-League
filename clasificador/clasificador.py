@@ -1,16 +1,33 @@
 import tensorflow as tf
-import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 import os
+from PIL import Image
+import numpy as np
 
 # Configurar rutas a los datos
 base_dir = 'clasificador/data'
 train_dir = os.path.join(base_dir, 'train')
 val_dir = os.path.join(base_dir, 'val')
+
+# Función para verificar imágenes y eliminar las corruptas
+def remove_corrupted_images(directory):
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            try:
+                img = Image.open(file_path)
+                img.verify()  # Verificar la imagen
+            except (IOError, SyntaxError) as e:
+                print(f'Removing corrupted image: {file_path}')
+                os.remove(file_path)
+
+# Eliminar imágenes corruptas de los directorios de entrenamiento y validación
+remove_corrupted_images(train_dir)
+remove_corrupted_images(val_dir)
 
 # Preprocesamiento de las imágenes
 train_datagen = ImageDataGenerator(rescale=1.0/255.0,
@@ -33,6 +50,10 @@ val_generator = val_datagen.flow_from_directory(val_dir,
                                                 target_size=(150, 150),
                                                 batch_size=32,
                                                 class_mode='categorical')
+
+# Verificar que los generadores no sean None
+if train_generator is None or val_generator is None:
+    raise ValueError("Error al crear los generadores de datos. Verifica los directorios de imágenes.")
 
 # Construir el modelo CNN
 model = Sequential([
