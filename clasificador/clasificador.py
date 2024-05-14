@@ -1,4 +1,5 @@
 import tensorflow as tf
+import keras
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
@@ -49,7 +50,7 @@ model = Sequential([
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-model.compile(optimizer=Adam(lr=1e-4),
+model.compile(optimizer=Adam(learning_rate=1e-4),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
