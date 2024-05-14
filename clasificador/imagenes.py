@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 
 # Directorios base
-base_dir = 'data'
+base_dir = 'clasificador/data'
 train_dir = os.path.join(base_dir, 'train')
 val_dir = os.path.join(base_dir, 'val')
 
@@ -11,23 +11,23 @@ val_dir = os.path.join(base_dir, 'val')
 os.makedirs(train_dir, exist_ok=True)
 os.makedirs(val_dir, exist_ok=True)
 
-# Directorios para cada clase
-train_teamA_dir = os.path.join(train_dir, 'TeamA')
-train_teamB_dir = os.path.join(train_dir, 'TeamB')
-val_teamA_dir = os.path.join(val_dir, 'TeamA')
-val_teamB_dir = os.path.join(val_dir, 'TeamB')
+# Directorios para cada equipo
+train_dortmund_dir = os.path.join(train_dir, 'Dortmund')
+train_madrid_dir = os.path.join(train_dir, 'RealMadrid')
+val_dortmund_dir = os.path.join(val_dir, 'Dortmund')
+val_madrid_dir = os.path.join(val_dir, 'RealMadrid')
 
-# Crear directorios de entrenamiento y validación para cada clase
-os.makedirs(train_teamA_dir, exist_ok=True)
-os.makedirs(train_teamB_dir, exist_ok=True)
-os.makedirs(val_teamA_dir, exist_ok=True)
-os.makedirs(val_teamB_dir, exist_ok=True)
+# Crear directorios de entrenamiento y validación para cada equipo
+os.makedirs(train_dortmund_dir, exist_ok=True)
+os.makedirs(train_madrid_dir, exist_ok=True)
+os.makedirs(val_dortmund_dir, exist_ok=True)
+os.makedirs(val_madrid_dir, exist_ok=True)
 
 print("Estructura de directorios creada:")
-print(f"- {train_teamA_dir}")
-print(f"- {train_teamB_dir}")
-print(f"- {val_teamA_dir}")
-print(f"- {val_teamB_dir}")
+print(f"- {train_dortmund_dir}")
+print(f"- {train_madrid_dir}")
+print(f"- {val_dortmund_dir}")
+print(f"- {val_madrid_dir}")
 
 # Función para crear imágenes de ejemplo
 def create_sample_image(directory, image_name):
@@ -36,12 +36,12 @@ def create_sample_image(directory, image_name):
     image.save(image_path)
 
 # Generar imágenes de ejemplo
-num_samples = 20  # Número de imágenes de ejemplo por clase por conjunto (entrenamiento/validación)
+num_samples = 20  # Número de imágenes de ejemplo por equipo por conjunto (entrenamiento/validación)
 
 for i in range(num_samples):
-    create_sample_image(train_teamA_dir, f'teamA_train_{i}.jpg')
-    create_sample_image(train_teamB_dir, f'teamB_train_{i}.jpg')
-    create_sample_image(val_teamA_dir, f'teamA_val_{i}.jpg')
-    create_sample_image(val_teamB_dir, f'teamB_val_{i}.jpg')
+    create_sample_image(train_dortmund_dir, f'dortmund_train_{i}.jpg')
+    create_sample_image(train_madrid_dir, f'madrid_train_{i}.jpg')
+    create_sample_image(val_dortmund_dir, f'dortmund_val_{i}.jpg')
+    create_sample_image(val_madrid_dir, f'madrid_val_{i}.jpg')
 
 print("Imágenes de ejemplo creadas.")
