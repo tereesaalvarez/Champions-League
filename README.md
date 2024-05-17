@@ -1,3 +1,3 @@
 # Champions-League
-El archivo con los datos de análisis y regresión lineal correctos es analisis_bien.ipynb
+Link del repositorio: https://github.com/tereesaalvarez/Champions-League.git
 
